@@ -8,6 +8,7 @@ import io.netty.util.CharsetUtil;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * ClassName: NettyServerHandler
@@ -21,7 +22,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //    private static String DELIMITER = "\n";
     private static String DELIMITER = "_$";
 
-      @Override
+//    private static AtomicInteger count1 = new AtomicInteger(0);
+//    private static AtomicInteger count2 = new AtomicInteger(0);
+//    private static AtomicInteger count3 = new AtomicInteger(0);
+
+    private static volatile int count1 = 1;
+    private static volatile int count2 = 1;
+    private static volatile int count3 = 1;
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)  throws Exception
     {
 
@@ -29,11 +38,23 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //处理收到的数据，并反馈消息到到客户端
         String clientMsg = (String) msg;
         if ("吃了没，您呐？".equals(clientMsg)){
-            ctx.channel().writeAndFlush(Unpooled.copiedBuffer("刚吃。" + DELIMITER,CharsetUtil.UTF_8));
+            ctx.write(Unpooled.copiedBuffer("刚吃。" + DELIMITER,CharsetUtil.UTF_8));
+            if (count1 % 50000 == 0){
+                ctx.flush();
+            }
+            count1++;
         } else if ("您这，嘛去？".equals(clientMsg)){
-            ctx.channel().writeAndFlush(Unpooled.copiedBuffer("嗨，没事儿溜溜弯儿。" + DELIMITER,CharsetUtil.UTF_8));
+            ctx.write(Unpooled.copiedBuffer("嗨，没事儿溜溜弯儿。" + DELIMITER,CharsetUtil.UTF_8));
+            if (count2 % 50000 == 0){
+                ctx.flush();
+            }
+            count2++;
         } else if ("有空家里坐坐啊。".equals(clientMsg)){
-            ctx.channel().writeAndFlush(Unpooled.copiedBuffer("回头去给老太太请安！" + DELIMITER,CharsetUtil.UTF_8));
+            ctx.write(Unpooled.copiedBuffer("回头去给老太太请安！" + DELIMITER,CharsetUtil.UTF_8));
+            if (count3 % 50000 == 0){
+                ctx.flush();
+            }
+            count3++;
         }
     }
 

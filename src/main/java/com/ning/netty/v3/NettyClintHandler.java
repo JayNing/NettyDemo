@@ -24,6 +24,14 @@ public class NettyClintHandler extends ChannelInboundHandlerAdapter {
     private static String DELIMITER = "_$";
 
     private static AtomicInteger count = new AtomicInteger(0);
+//    private static AtomicInteger count1 = new AtomicInteger(1);
+//    private static AtomicInteger count2 = new AtomicInteger(1);
+//    private static AtomicInteger count3 = new AtomicInteger(1);
+
+    private static volatile int count1 = 1;
+    private static volatile int count2 = 1;
+    private static volatile int count3 = 1;
+
     private long start;
 
     @Override
@@ -36,12 +44,24 @@ public class NettyClintHandler extends ChannelInboundHandlerAdapter {
 //        System.out.println(msg);
         String fromServer = (String) msg;
         if ("刚吃。".equals(fromServer)){
-            ctx.channel().writeAndFlush(Unpooled.copiedBuffer("您这，嘛去？"+DELIMITER,CharsetUtil.UTF_8));
+            ctx.write(Unpooled.copiedBuffer("您这，嘛去？"+DELIMITER,CharsetUtil.UTF_8));
+            if (count1 % 50000 == 0){
+                ctx.flush();
+            }
+            count1++;
         } else if ("嗨，没事儿溜溜弯儿。".equals(fromServer)){
-            ctx.channel().writeAndFlush(Unpooled.copiedBuffer("有空家里坐坐啊。"+DELIMITER,CharsetUtil.UTF_8));
+            ctx.write(Unpooled.copiedBuffer("有空家里坐坐啊。"+DELIMITER,CharsetUtil.UTF_8));
+            if (count2 % 50000 == 0){
+                ctx.flush();
+            }
+            count2++;
         }else if ("回头去给老太太请安！".equals(fromServer)){
             int incrementAndGet = count.incrementAndGet();
-            System.out.println("第" + incrementAndGet + "次");
+            if (count3 % 50000 == 0){
+                ctx.flush();
+                System.out.println("第" + incrementAndGet + "次");
+            }
+            count3++;
             if (incrementAndGet == 100000){
                 long end = System.currentTimeMillis();
                 System.out.println("耗时：" + (end - start) + "ms");
@@ -52,8 +72,11 @@ public class NettyClintHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         this.start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++){
-            ctx.channel().writeAndFlush(Unpooled.copiedBuffer("吃了没，您呐？"+DELIMITER,CharsetUtil.UTF_8));
+        for (int i = 1; i <= 100000; i++){
+            ctx.write(Unpooled.copiedBuffer("吃了没，您呐？"+DELIMITER,CharsetUtil.UTF_8));
+            if (i % 50000 == 0){
+                ctx.flush();
+            }
         }
     }
 
