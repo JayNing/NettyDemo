@@ -45,19 +45,19 @@ public class NettyClintHandler extends ChannelInboundHandlerAdapter {
         String fromServer = (String) msg;
         if ("刚吃。".equals(fromServer)){
             ctx.write(Unpooled.copiedBuffer("您这，嘛去？"+DELIMITER,CharsetUtil.UTF_8));
-            if (count1 % 50000 == 0){
+            if (count1 % NettyContant.NUM == 0){
                 ctx.flush();
             }
             count1++;
         } else if ("嗨，没事儿溜溜弯儿。".equals(fromServer)){
             ctx.write(Unpooled.copiedBuffer("有空家里坐坐啊。"+DELIMITER,CharsetUtil.UTF_8));
-            if (count2 % 50000 == 0){
+            if (count2 % NettyContant.NUM == 0){
                 ctx.flush();
             }
             count2++;
         }else if ("回头去给老太太请安！".equals(fromServer)){
             int incrementAndGet = count.incrementAndGet();
-            if (count3 % 50000 == 0){
+            if (count3 % NettyContant.NUM == 0){
                 ctx.flush();
                 System.out.println("第" + incrementAndGet + "次");
             }
@@ -74,7 +74,7 @@ public class NettyClintHandler extends ChannelInboundHandlerAdapter {
         this.start = System.currentTimeMillis();
         for (int i = 1; i <= 100000; i++){
             ctx.write(Unpooled.copiedBuffer("吃了没，您呐？"+DELIMITER,CharsetUtil.UTF_8));
-            if (i % 50000 == 0){
+            if (i % NettyContant.NUM == 0){
                 ctx.flush();
             }
         }

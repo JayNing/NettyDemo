@@ -34,7 +34,7 @@ public class AppServerHello {
             ServerBootstrap b = new ServerBootstrap();//用于启动NIO服务
             b.group(group)
                     .channel(NioServerSocketChannel.class) //通过工厂方法设计模式实例化一个channel
-                    .option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(64, 1024, 65536))
+                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator( 65536))
                     .localAddress(new InetSocketAddress(port))//设置监听端口
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                 //ChannelInitializer是一个特殊的处理类，他的目的是帮助使用者配置一个新的Channel,用于把许多自定义的处理类增加到pipline上来

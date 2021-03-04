@@ -39,19 +39,19 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String clientMsg = (String) msg;
         if ("吃了没，您呐？".equals(clientMsg)){
             ctx.write(Unpooled.copiedBuffer("刚吃。" + DELIMITER,CharsetUtil.UTF_8));
-            if (count1 % 50000 == 0){
+            if (count1 % NettyContant.NUM == 0){
                 ctx.flush();
             }
             count1++;
         } else if ("您这，嘛去？".equals(clientMsg)){
             ctx.write(Unpooled.copiedBuffer("嗨，没事儿溜溜弯儿。" + DELIMITER,CharsetUtil.UTF_8));
-            if (count2 % 50000 == 0){
+            if (count2 % NettyContant.NUM == 0){
                 ctx.flush();
             }
             count2++;
         } else if ("有空家里坐坐啊。".equals(clientMsg)){
             ctx.write(Unpooled.copiedBuffer("回头去给老太太请安！" + DELIMITER,CharsetUtil.UTF_8));
-            if (count3 % 50000 == 0){
+            if (count3 % NettyContant.NUM == 0){
                 ctx.flush();
             }
             count3++;

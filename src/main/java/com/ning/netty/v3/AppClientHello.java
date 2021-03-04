@@ -45,7 +45,7 @@ public class AppClientHello {
             Bootstrap bs = new Bootstrap();//客户端辅助启动类
             bs.group(group)
                     .channel(NioSocketChannel.class)//实例化一个Channel
-                    .option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(64, 1024, 65536))
+                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator( 65536))
                     .remoteAddress(new InetSocketAddress(host,port))
                     .handler(new ChannelInitializer<SocketChannel>()//进行通道初始化配置
             {
